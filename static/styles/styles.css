@@ -1,0 +1,102 @@
+/* Style global de l'application */
+.stApp {
+    background-color: #001f3f; /* Bleu marine */
+}
+
+/* Style général pour tout le texte sauf le menu */
+div, p, h1, h2, h3, h4, h5, h6 {
+    color: #FFA500; /* Orange */
+}
+
+/* Style spécifique pour la sidebar */
+.stSidebar {
+    background-color: #87CEEB !important; /* SkyBlue */
+}
+
+/* Style général pour tout le texte sauf le menu */
+div, p, h1, h2, h3, h4, h5, h6 {
+    color: #FFA500; /* Orange par défaut pour les textes */
+}
+
+/* Style spécifique pour le texte dans la sidebar */
+ .stSidebar p, .stSidebar h1, .stSidebar h2, .stSidebar h3, .stSidebar h4, .stSidebar h5, .stSidebar h6 {
+    color: #000000 !important; /* Noir pour la sidebar */
+}
+
+/* Style pour les éléments du menu dans la sidebar */
+.stSidebar .st-c4 .st-bo, 
+.stSidebar .st-c4 .st-b0,
+.stSidebar label {
+    color: #000000 !important; /* Noir pour les éléments du menu */
+}
+
+/* Style de la boîte de sélection dans la sidebar */
+.st-c4 .st-bo {
+    color: #000000 !important; /* Noir */
+}
+
+/* Style du label de la boîte de sélection dans la sidebar */
+.st-c4 .st-b0 {
+    color: #000000 !important; /* Noir */
+}
+
+/* Style des boutons */
+.stButton>button {
+    background-color: #333333; /* Gris anthracite */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* Style des boutons lors du survol */
+.stButton>button:hover {
+    background-color: #555555; /* Gris plus clair au hover */
+}
+
+/* Style des colonnes contenant les images */
+.col1, .col2, .col3 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Style de l'image du logo */
+.stImage img {
+    width: 100px;
+}
+
+/* Style pour les champs de texte */
+.stTextInput>input {
+    border-radius: 8px;
+    padding: 8px;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+/* Style pour les notifications de succès */
+.stAlert-success {
+    background-color: #28a745;
+    color: white;
+    border-radius: 8px;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+/* Style pour les notifications d'erreur */
+.stAlert-error {
+    background-color: #dc3545;
+    color: white;
+    border-radius: 8px;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+/* Style des checkboxes pour la page de présence journalière */
+.stCheckbox>div {
+    font-size: 18px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
