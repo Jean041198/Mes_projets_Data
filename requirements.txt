@@ -1,5 +1,5 @@
 streamlit==1.25.0
-pillow<11
+Pillow==9.5.0
 mysql-connector-python==8.0.33
 seaborn==0.12.2
 matplotlib==3.8.1
