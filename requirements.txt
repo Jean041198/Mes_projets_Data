@@ -1,9 +1,13 @@
-streamlit==1.25.0
+streamlit==1.40.1
 Pillow==9.5.0
 mysql-connector-python==8.0.33
-seaborn==0.12.2
 matplotlib==3.8.1
 pandas==2.1.1
 numpy>=1.26.0
 setuptools== 75.5.0
 wheel== 0.45.0
+seaborn==0.13.2
+setuptools==75.5.0
+toolz==0.12.1
+wheel==0.45.0
+zipp==3.21.0

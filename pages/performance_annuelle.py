@@ -278,28 +278,28 @@ def performance_annuelle_page():
                     st.pyplot(fig)
 
                     # Calcul de la moyenne pondérée
-                moyenne_ponderee = calculer_moyenne_ponderee(st.session_state['class'], notes_eleve)
-                st.subheader("Moyenne de l'élève")
-                st.write(f"Moyenne de l'élève : {moyenne_ponderee}/20")
+                    moyenne_ponderee = calculer_moyenne_ponderee(st.session_state['class'], notes_eleve)
+                    st.subheader("Moyenne de l'élève")
+                    st.write(f"Moyenne de l'élève : {moyenne_ponderee}/20")
 
-                  # Interprétation de la moyenne pondérée
-                if moyenne_ponderee != "Non applicable":
-                    if moyenne_ponderee >= 14:
-                        st.write(f"La moyenne  de l'élève est de {moyenne_ponderee}/20, ce qui correspond à une excellente performance. "
+                    # Interprétation de la moyenne pondérée
+                    if moyenne_ponderee != "Non applicable":
+                        if moyenne_ponderee >= 14:
+                            st.write(f"La moyenne  de l'élève est de {moyenne_ponderee}/20, ce qui correspond à une excellente performance. "
                             f"L'élève excelle dans ses études et maîtrise bien les différentes matières.")
-                    elif 10 <= moyenne_ponderee < 14:
-                        st.write(f"La moyenne  de l'élève est de {moyenne_ponderee}/20, ce qui correspond à une performance satisfaisante. "
+                        elif 10 <= moyenne_ponderee < 14:
+                            st.write(f"La moyenne  de l'élève est de {moyenne_ponderee}/20, ce qui correspond à une performance satisfaisante. "
                             f"L'élève a un bon niveau général, mais il (elle) peut encore progresser dans certaines matières.")
+                        else:
+                            st.write(f"La moyenne  de l'élève est de {moyenne_ponderee}/20, ce qui correspond à une performance insuffisante. "
+                            f"L'élève a des difficultés dans certaines matières et nécessite un suivi plus approfondi.")
                     else:
-                        st.write(f"La moyenne  de l'élève est de {moyenne_ponderee}/20, ce qui correspond à une performance insuffisante. "
-                        f"L'élève a des difficultés dans certaines matières et nécessite un suivi plus approfondi.")
-                else:
-                     st.write("La moyenne  n'est pas disponible pour cet élève.")
+                        st.write("La moyenne  n'est pas disponible pour cet élève.")
 
 
                     # Prise de décision automatique
-                st.subheader("Prise de décision")
-                for matiere, note in notes_eleve.items():
+                    st.subheader("Prise de décision")
+                    for matiere, note in notes_eleve.items():
                         enseignant_nom = get_enseignant_nom(matiere)  # Obtenir le nom de l'enseignant
                         if note >= 14:
                             st.write(f"{matiere} : Excellente performance annuelle, continuez comme ça !Félicitations prof {enseignant_nom} pour votre travail effectuer tout au long de cette année scolaire!")

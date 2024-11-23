@@ -100,7 +100,81 @@ def main():
     elif st.session_state['page'] == "Application":
         st.title("À propos de l'application")
         st.write("## Guide d' utilisation")
-        st.write("Voici les informations sur l'application...")
+        st.markdown("""
+
+        Ce guide décrit les fonctionnalités de l'application pour chaque type d'utilisateur.
+         **Tous les utilisateurs utilisent la barre latérale pour naviguer entre les pages de l'application.** 
+
+        **I. Accès à l'application**
+
+        Pour accéder à l'application, rendez-vous sur l'URL fournie. Vous aurez besoin de vous connecter en utilisant votre identifiant et votre mot de passe.
+
+        **II. Types d'utilisateurs et fonctionnalités**
+
+        L'application propose différents niveaux d'accès pour garantir la sécurité et la confidentialité des données.
+
+        **A. Administration**
+
+        Les administrateurs ont accès aux fonctionnalités suivantes :
+
+        *   **Page des Comptes :** Se coonecter via ses identifiants.
+        *   **Page d'évolution :** Consulter et suivre l'évolution des performances des élèves au niveau séquentiel, trimestriel et annuel. Générer des rapports et analyses.
+        *   **Page des classes :** Afficher et gérer les informations sur les classes.
+        *   **Présence Journalière :** Consulter la présence des élèves. 
+        *   **Pages de Performance (Visualisation) :** Visualiser les performances des élèves de manière globale avec des analyses et des graphiques détaillés.
+
+
+        **B. Administrateur Principal**
+
+        L'administrateur principal possède les mêmes fonctionnalités que l'administrateur et peut :
+
+        *   **Surveiller l'activité de tous les utilisateurs.**
+        *   **Gérer les paramètres généraux de l'application.**
+        *   **Visualiser des rapports plus détaillés.**
+
+
+        **C. Enseignant**
+
+        Les enseignants ont un accès limité à l'application, axé sur la gestion des notes et le suivi de la progression de leurs élèves :
+
+        *   **Page des Comptes :** Se connecter à l'application.
+        *   **Page d'évolution :** Consulter et suivre l'évolution des performances des élèves au niveau séquentiel, trimestriel et annuel.
+        *   **Page des Classes:** Sélectionner la classe.
+        *   **Pages de Performance (Saisie) :** Saisir et enregistrer les notes de leurs élèves pour chaque séquence, chaque trimestre et en fin d'année.
+        *   **Pages de Performance (Visualisation) :** Visualiser les performances de leurs élèves.
+
+
+        **D. Parent**
+
+        Les parents ont accès aux informations concernant leurs enfants :
+
+        *   **Page de connexion des parents :** Se connecter avec un identifiant et un mot de passe.
+        *   **Tableau de bord des parents :** Visualiser les notes, les présences et les rapports de progression de leurs enfants.
+
+
+        **III. Instructions pour l'utilisation de chaque page**
+
+        Les descriptions suivantes détaillent l'utilisation de chaque page de l'application :
+
+        *   **Page des Comptes :** Cette page permet à chaque
+        *   **Page d'évolution:** Cette page permet de suivre l'évolution des performances des élèves. Sélectionnez le type d'évolution (séquentiel, trimestriel, annuel), la classe et visualisez les rapports.
+        *   **Page des Classes :** Cette page liste les différentes classes. Sélectionnez la classe pour accéder à la saisie ou la visualisation des notes. 
+        *   **Présence Journalière :** Cette page permet de saisir et de visualiser la présence des élèves.
+        *   **Pages de Performance (Saisie/Visualisation) :** Ces pages permettent aux enseignants de saisir et enregistrer les notes. L'administrateur et l'administrateur principal peuvent visualiser les notes et les graphiques d'évolution.
+        *   **Tableau de bord des parents :** Cette page affiche un résumé des notes, des présences et des rapports de progression des enfants du parent connecté.
+
+
+        **IV. Assistance**
+
+        Pour toute question ou problème technique, veuillez contacter l'équipe d'assistance à l'adresse email suivante : angelnyoungou@gmail.com
+
+
+        **V. Avertissement**
+
+        Toutes les données saisies dans l'application sont **confidentielles** et doivent être utilisées à des fins scolaires uniquement.
+
+        Ce guide est conçu pour vous aider à utiliser l'application de manière efficace. N'hésitez pas à nous contacter pour toute question.
+    """, unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
