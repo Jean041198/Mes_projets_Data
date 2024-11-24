@@ -176,5 +176,21 @@ def main():
         Ce guide est conçu pour vous aider à utiliser l'application de manière efficace. N'hésitez pas à nous contacter pour toute question.
     """, unsafe_allow_html=True)
 
+# Injecter le JavaScript
+polyfill_script = """
+<script>
+if (!String.prototype.replaceAll) {
+    String.prototype.replaceAll = function(search, replacement) {
+        const target = this;
+        return target.split(search).join(replacement);
+    };
+}
+</script>
+"""
+st.components.v1.html(polyfill_script, height=0)
+
+
+
+
 if __name__ == "__main__":
     main()
