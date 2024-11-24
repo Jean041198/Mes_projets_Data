@@ -1,6 +1,6 @@
 import streamlit as st
 from pages import classes, evolution_sequentielle, evolution_trimestrielle
-
+import os
 def load_css(file_name):
     with open(file_name) as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)

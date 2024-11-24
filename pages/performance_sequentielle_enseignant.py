@@ -3,6 +3,7 @@ import mysql.connector
 import seaborn as sns
 import matplotlib.pyplot as plt
 from statistics import mean, median, stdev
+import os
 
 def load_css(file_name):
     with open(file_name) as f:
@@ -10,13 +11,12 @@ def load_css(file_name):
 
 def get_db_connection():
     mydb = mysql.connector.connect(
-        host="localhost",
-        user="gelito01",
-        password="admin@01",
-        database="collegefoganggenies_db"
+        host=os.getenv('mysql_host'),  # récupère l'hôte depuis les variables d'environnement
+        user=os.getenv('mysql_user'),  # récupère l'utilisateur depuis les variables d'environnement
+        password=os.getenv('mysql_password'),  # récupère le mot de passe depuis les variables d'environnement
+        database=os.getenv('mysql_database')  # récupère le nom de la base de données depuis les variables d'environnement
     )
     return mydb
-
 
 # Dictionnaire des coefficients par matière et classe
 coefficients = {
