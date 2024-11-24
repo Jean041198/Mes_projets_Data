@@ -5,19 +5,18 @@ from pages import performance_trimestrielle, performance_annuelle
 from pages import performance_sequentielle_enseignant, performance_trimestrielle_enseignant
 from pages import performance_annuelle_enseignant
 import mysql.connector
+import os
 
 
 # Fonction pour établir la connexion à la base de données
 def get_db_connection():
-    # Remplacez les informations par vos propres valeurs
     mydb = mysql.connector.connect(
-        host="localhost",
-        user="gelito01",
-        password="admin@01",
-        database="collegefoganggenies_db"
+        host=os.getenv('mysql_host'),  # récupère l'hôte depuis les variables d'environnement
+        user=os.getenv('mysql_user'),  # récupère l'utilisateur depuis les variables d'environnement
+        password=os.getenv('mysql_password'),  # récupère le mot de passe depuis les variables d'environnement
+        database=os.getenv('mysql_database')  # récupère le nom de la base de données depuis les variables d'environnement
     )
     return mydb
-
 
 def load_css(file_name):
     with open(file_name) as f:
