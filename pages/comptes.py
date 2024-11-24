@@ -1,7 +1,7 @@
 import streamlit as st
 from pages import page_d_evolution
 import mysql.connector
-import os
+
 
 ADMIN_ID = "admin123"
 ADMIN_PASSWORD = "password123"
@@ -17,10 +17,10 @@ def load_css(file_name):
 # Fonction pour établir la connexion à la base de données
 def get_db_connection():
     mydb = mysql.connector.connect(
-        host=os.getenv('mysql_host'),  # récupère l'hôte depuis les variables d'environnement
-        user=os.getenv('mysql_user'),  # récupère l'utilisateur depuis les variables d'environnement
-        password=os.getenv('mysql_password'),  # récupère le mot de passe depuis les variables d'environnement
-        database=os.getenv('mysql_database')  # récupère le nom de la base de données depuis les variables d'environnement
+        host=st.secrets["mysql"]["host"],  # Accéder au secret stocké dans secrets.toml
+        user=st.secrets["mysql"]["user"],  # Accéder au secret stocké dans secrets.toml
+        password=st.secrets["mysql"]["password"],  # Accéder au secret stocké dans secrets.toml
+        database=st.secrets["mysql"]["database"]  # Accéder au secret stocké dans secrets.toml
     )
     return mydb
 
