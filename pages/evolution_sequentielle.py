@@ -1,6 +1,7 @@
 import streamlit as st
 from pages.classes import classes_page
 import mysql.connector
+import os
 
 def load_css(file_name):
     with open(file_name) as f:
@@ -10,14 +11,23 @@ def load_css(file_name):
 
 # Fonction pour établir la connexion à la base de données
 def get_db_connection():
+    # Détecter l'environnement (Cloud ou local)
+    if "STREAMLIT_CLOUD" in os.environ:
+        # Si l'application est déployée sur Streamlit Cloud, utiliser l'adresse IP publique du serveur MySQL
+        host = st.secrets["mysql"].get("cloud_host", "IP_PUBLIQUE_DE_VOTRE_SERVEUR")  # Par défaut, utilisez un hôte distant
+    else:
+        # En local, utilisez l'adresse localhost
+        host = st.secrets["mysql"]["host"]  # 127.0.0.1
+
+    # Connexion à la base de données MySQL avec les informations de secrets
     mydb = mysql.connector.connect(
-        host=st.secrets["mysql"]["host"],  # Accéder au secret stocké dans secrets.toml
-        user=st.secrets["mysql"]["user"],  # Accéder au secret stocké dans secrets.toml
-        password=st.secrets["mysql"]["password"],  # Accéder au secret stocké dans secrets.toml
-        database=st.secrets["mysql"]["database"]  # Accéder au secret stocké dans secrets.toml
+        host=host,
+        user=st.secrets["mysql"]["user"],
+        password=st.secrets["mysql"]["password"],
+        database=st.secrets["mysql"]["database"],
+        port=st.secrets["mysql"].get("port", 3306)  # Utiliser 3306 par défaut si non spécifié
     )
     return mydb
-
 def evolution_sequentielle_page():
     load_css("static/styles/styles.css")
     col1, col2, col3 = st.columns([1.5, 2, 0.5])
