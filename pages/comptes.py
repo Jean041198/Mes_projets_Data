@@ -19,19 +19,21 @@ def load_css(file_name):
 def get_db_connection():
     # Détecter l'environnement (Cloud ou local)
     if "STREAMLIT_CLOUD" in os.environ:
-        # Si l'application est déployée sur Streamlit Cloud, utiliser l'adresse IP publique du serveur MySQL
-        host = st.secrets["mysql"].get("cloud_host", "IP_PUBLIQUE_DE_VOTRE_SERVEUR")  # Par défaut, utilisez un hôte distant
+        # Si l'application est déployée sur Streamlit Cloud, utilisez Ngrok
+        host = st.secrets["mysql"]["host"]
+        port = st.secrets["mysql"]["port"]
     else:
-        # En local, utilisez l'adresse localhost
-        host = st.secrets["mysql"]["host"]  # 127.0.0.1
+        # En local, localhost et le port par défaut
+        host = "127.0.0.1"
+        port = 3306
 
-    # Connexion à la base de données MySQL avec les informations de secrets
+    # Connexion à MySQL
     mydb = mysql.connector.connect(
         host=host,
+        port=port,
         user=st.secrets["mysql"]["user"],
         password=st.secrets["mysql"]["password"],
-        database=st.secrets["mysql"]["database"],
-        port=st.secrets["mysql"].get("port", 3306)  # Utiliser 3306 par défaut si non spécifié
+        database=st.secrets["mysql"]["database"]
     )
     return mydb
 
