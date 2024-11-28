@@ -3,7 +3,6 @@ from pages import page_d_evolution
 import mysql.connector
 import os
 
-
 ADMIN_ID = "admin123"
 ADMIN_PASSWORD = "password123"
 TEACHER_ID = "teacher123"
@@ -17,23 +16,11 @@ def load_css(file_name):
 
 # Fonction pour établir la connexion à la base de données
 def get_db_connection():
-    # Détecter l'environnement (Cloud ou local)
-    if "STREAMLIT_CLOUD" in os.environ:
-        # Si l'application est déployée sur Streamlit Cloud, utilisez Ngrok
-        host = st.secrets["mysql"]["host"]
-        port = st.secrets["mysql"]["port"]
-    else:
-        # En local, localhost et le port par défaut
-        host = "127.0.0.1"
-        port = 3306
-
-    # Connexion à MySQL
     mydb = mysql.connector.connect(
-        host=host,
-        port=port,
-        user=st.secrets["mysql"]["user"],
-        password=st.secrets["mysql"]["password"],
-        database=st.secrets["mysql"]["database"]
+        host="localhost",
+        user="gelito01",
+        password="admin@01",
+        database="collegefoganggenies_db"
     )
     return mydb
 

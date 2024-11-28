@@ -7,27 +7,18 @@ from pages import performance_annuelle_enseignant
 import mysql.connector
 import os
 
+
 # Fonction pour établir la connexion à la base de données
 def get_db_connection():
-    # Détecter l'environnement (Cloud ou local)
-    if "STREAMLIT_CLOUD" in os.environ:
-        # Si l'application est déployée sur Streamlit Cloud, utilisez Ngrok
-        host = st.secrets["mysql"]["host"]
-        port = st.secrets["mysql"]["port"]
-    else:
-        # En local, utilisez localhost et le port par défaut
-        host = "127.0.0.1"
-        port = 3306
-
-    # Connexion à MySQL
+    # Remplacez les informations par vos propres valeurs
     mydb = mysql.connector.connect(
-        host=host,
-        port=port,
-        user=st.secrets["mysql"]["user"],
-        password=st.secrets["mysql"]["password"],
-        database=st.secrets["mysql"]["database"]
+        host="localhost",
+        user="gelito01",
+        password="admin@01",
+        database="collegefoganggenies_db"
     )
     return mydb
+
 
 def load_css(file_name):
     with open(file_name) as f:
