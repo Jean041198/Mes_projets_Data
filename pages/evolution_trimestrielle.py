@@ -1,6 +1,6 @@
 import streamlit as st
 from pages.classes import classes_page
-import mysql.connector
+import sqlite3
 
 def load_css(file_name):
     with open(file_name) as f:
@@ -9,14 +9,12 @@ def load_css(file_name):
 
 
 # Fonction pour établir la connexion à la base de données
+DB_PATH = "utils/collegefoganggenies_db.sqlite"      
+
+# Fonction pour établir la connexion à la base de données SQLite
 def get_db_connection():
-    mydb = mysql.connector.connect(
-        host="localhost",
-        user="gelito01",
-        password="admin@01",
-        database="collegefoganggenies_db"
-    )
-    return mydb
+    conn = sqlite3.connect(DB_PATH)
+    return conn
 
 
 

@@ -4,20 +4,16 @@ from pages import evolution_sequentielle, performance_sequentielle, evolution_tr
 from pages import performance_trimestrielle, performance_annuelle
 from pages import performance_sequentielle_enseignant, performance_trimestrielle_enseignant
 from pages import performance_annuelle_enseignant
-import mysql.connector
+import sqlite3
 import os
 
 
-# Fonction pour établir la connexion à la base de données
+DB_PATH = "utils/collegefoganggenies_db.sqlite"      
+
+# Fonction pour établir la connexion à la base de données SQLite
 def get_db_connection():
-    # Remplacez les informations par vos propres valeurs
-    mydb = mysql.connector.connect(
-        host="localhost",
-        user="gelito01",
-        password="admin@01",
-        database="collegefoganggenies_db"
-    )
-    return mydb
+    conn = sqlite3.connect(DB_PATH)
+    return conn
 
 
 def load_css(file_name):

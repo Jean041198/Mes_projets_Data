@@ -1,5 +1,5 @@
 import streamlit as st
-import mysql.connector
+import sqlite3
 import seaborn as sns
 import matplotlib.pyplot as plt
 from statistics import mean, median, stdev
@@ -8,14 +8,13 @@ def load_css(file_name):
     with open(file_name) as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
+DB_PATH = "utils/collegefoganggenies_db.sqlite"      
+
+# Fonction pour établir la connexion à la base de données SQLite
 def get_db_connection():
-    mydb = mysql.connector.connect(
-        host="localhost",
-        user="gelito01",
-        password="admin@01",
-        database="collegefoganggenies_db"
-    )
-    return mydb
+    conn = sqlite3.connect(DB_PATH)
+    return conn
+
 
 # Dictionnaire des coefficients par matière et classe
 coefficients = {
@@ -352,237 +351,110 @@ def performance_trimestrielle_page():
 
 # Fonction pour obtenir les élèves d'une classe
 def get_eleves_from_class(class_name):
-    db = get_db_connection()
-    cursor = db.cursor()
-    sql = "SELECT matricule_eleve, nom, prenom FROM eleves WHERE classe = %s"
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    sql = "SELECT matricule_eleve, nom, prenom FROM eleves WHERE classe = ?"
     cursor.execute(sql, (class_name,))
     eleves = cursor.fetchall()
-    cursor.close()
-    db.close()
-
-    return [f"{row[1]} {row[2]}" for row in eleves]  # Retourne une liste de noms complets
+    conn.close()
+    return [f"{row[1]} {row[2]}" for row in eleves]
 
 
-
-
-# Fonction pour obtenir le nom de l'enseignant à partir d'une matière
 def get_enseignant_nom(matiere):
-    db = get_db_connection()
-    cursor = db.cursor()
+    conn = get_db_connection()
+    cursor = conn.cursor()
     sql = """
         SELECT e.nom
         FROM enseignants e
         JOIN matieres_des_enseignants me ON e.identifiant = me.identifiant_enseignant
-        WHERE me.matiere_enseignee = %s
+        WHERE me.matiere_enseignee = ?
     """
     cursor.execute(sql, (matiere,))
     result = cursor.fetchone()
-    cursor.close()
-    db.close()
-
+    conn.close()
     return result[0] if result else "N/A"
 
 
-
-# Fonction pour obtenir les informations d'un élève par son matricule
 def get_eleve_info(matricule_eleve):
-    db = get_db_connection()
-    cursor = db.cursor()
-    sql = "SELECT nom, prenom FROM eleves WHERE matricule_eleve = %s"
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    sql = "SELECT nom, prenom FROM eleves WHERE matricule_eleve = ?"
     cursor.execute(sql, (matricule_eleve,))
     result = cursor.fetchone()
-    cursor.close()
-    db.close()
-
+    conn.close()
     if result:
         return {"nom": result[0], "prenom": result[1]}
     else:
         return None
 
-# Fonction pour obtenir les matières enseignées dans une classe
 def get_matieres_for_class(class_name):
-    db = get_db_connection()
-    cursor = db.cursor()
-
-    # Requête SQL pour récupérer les matières et les noms d'enseignants
+    conn = get_db_connection()
+    cursor = conn.cursor()
     sql = """
         SELECT me.matiere_enseignee, IFNULL(e.nom, 'N/A') AS nom_enseignant
         FROM matieres_des_enseignants me
         LEFT JOIN enseignants e ON me.identifiant_enseignant = e.identifiant
         LEFT JOIN enseignants_classes ec ON me.identifiant_enseignant = ec.identifiant_enseignant
-        WHERE ec.nom_de_la_classe = %s AND (me.classe_specifique IS NULL OR me.classe_specifique = %s)
+        WHERE ec.nom_de_la_classe = ? AND (me.classe_specifique IS NULL OR me.classe_specifique = ?)
     """
     cursor.execute(sql, (class_name, class_name))
     matieres = cursor.fetchall()
-    cursor.close()
-    db.close()
-
-    # Ajouter "Travail manuel" ou "Manual labour" à la liste existante
+    conn.close()
     matieres_list = [{"matiere": row[0], "nom": row[1]} for row in matieres]
     if class_name in ['6ème', '5ème', '4ème']:
         matieres_list.append({"matiere": "Travail manuel", "nom": "N/A"})
     elif class_name in ['Form1', 'Form2', 'Form3']:
         matieres_list.append({"matiere": "Manual labour", "nom": "N/A"})
-
     return matieres_list
-# Fonction pour enregistrer les notes dans la base de données
-def enregistrer_notes_trimestrielles(class_name, eleves_selectionnes):
-    db = get_db_connection()
-    cursor = db.cursor()
-
-    for eleve_name in eleves_selectionnes:
-        for matiere in get_matieres_for_class(class_name):
-            note = st.session_state.get(f"note_{matiere['matiere']}")
-            if note:
-                matricule_eleve = get_matricule_by_nom_prenom(eleve_name)
-                if matricule_eleve:
-                    # Insérer la note dans la base de données
-                    sql = "INSERT INTO notes (matricule_eleve, matiere, note) VALUES (%s, %s, %s)"
-                    cursor.execute(sql, (matricule_eleve, matiere['matiere'], note))
-                    db.commit()
-
-                    note_id = cursor.lastrowid
-
-                    # Insérer la relation dans la table 'notes_sequentielles'
-                    sql = "INSERT INTO notes_trimestrielles (note_id, trimestre) VALUES (%s, %s)"
-                    cursor.execute(sql, (note_id, st.session_state['trimestre']))
-                    db.commit()
-
-    cursor.close()
-    db.close()
-
-# Fonction pour trouver le matricule d'un élève par son nom et prénom
-def get_matricule_by_nom_prenom(eleve_name):
-    db = get_db_connection()
-    cursor = db.cursor()
-    sql = "SELECT matricule_eleve FROM eleves WHERE CONCAT(nom, ' ', prenom) = %s"
-    cursor.execute(sql, (eleve_name,))
-    result = cursor.fetchone()
-    cursor.close()
-    db.close()
-
-    return result[0] if result else None
 
 
 def get_notes_eleve_trimestrielles(eleve_name=None, matricule_eleve=None):
-    db = get_db_connection()
-    cursor = db.cursor()
-
-    if matricule_eleve is not None:
-        # Utiliser le matricule de l'élève (pour le parent)
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    if matricule_eleve:
         sql = """
             SELECT n.matiere, n.note
             FROM notes n
             JOIN eleves e ON n.matricule_eleve = e.matricule_eleve
-            WHERE n.matricule_eleve = %s
+            JOIN notes_trimestrielles nt ON n.id = nt.note_id
+            WHERE n.matricule_eleve = ? AND nt.trimestre = ?
         """
-        cursor.execute(sql, (matricule_eleve,))
+        cursor.execute(sql, (matricule_eleve, st.session_state['trimestre']))
     else:
-        # Utiliser le nom de l'élève (pour l'admin et l'admin principal)
         sql = """
             SELECT n.matiere, n.note
             FROM notes n
             JOIN eleves e ON n.matricule_eleve = e.matricule_eleve
-            WHERE CONCAT(e.nom, ' ', e.prenom) = %s
+            JOIN notes_trimestrielles nt ON n.id = nt.note_id
+            WHERE e.nom || ' ' || e.prenom = ? AND nt.trimestre = ?
         """
-        cursor.execute(sql, (eleve_name,))
-
+        cursor.execute(sql, (eleve_name, st.session_state['trimestre']))
     notes = cursor.fetchall()
-    cursor.close()
-    db.close()
-
+    conn.close()
     return {row[0]: row[1] for row in notes}
-# Fonction pour obtenir les informations de l'enseignant pour une matière donnée
-def get_enseignant_infos(matiere):
-    db = get_db_connection()
-    cursor = db.cursor()
+
+def get_notes_eleve_precedentes(matricule_eleve, matiere, trimestre_precedent):
+    conn = get_db_connection()
+    cursor = conn.cursor()
     sql = """
-        SELECT e.nom
-        FROM enseignants e
-        JOIN matieres_des_enseignants me ON e.identifiant = me.identifiant_enseignant
-        WHERE me.matiere_enseignee = %s
-           AND (me.classe_specifique IS NULL OR me.classe_specifique = %s)  -- Vérifiez classe_specifique
+        SELECT n.note
+        FROM notes n
+        JOIN notes_trimestrielles nt ON n.id = nt.note_id
+        WHERE n.matricule_eleve = ? AND n.matiere = ? AND nt.trimestre = ?
     """
-    cursor.execute(sql, (matiere, st.session_state['class']))  # Passez la classe actuelle en argument
-    result = cursor.fetchone()
-    cursor.close()
-    db.close()
-
-    if result:
-        return {"nom": result[0]}
-    else:
-        return {"nom": "N/A"}
-
-# Fonction pour vérifier si les notes ont été enregistrées
-def notes_enregistrees(class_name, eleves_selectionnes):
-    db = get_db_connection()
-    cursor = db.cursor()
-
-    for eleve_name in eleves_selectionnes:
-        matricule_eleve = get_matricule_by_nom_prenom(eleve_name)
-        if matricule_eleve:
-            sql = """
-                SELECT COUNT(*) 
-                FROM notes n
-                JOIN notes_trimestrielles ns ON n.id = ns.note_id
-                WHERE n.matricule_eleve = %s AND ns.trimestre = %s
-            """
-            cursor.execute(sql, (matricule_eleve, st.session_state['trimestre']))
-            count = cursor.fetchone()[0]
-            if count == 0:
-                cursor.close()
-                db.close()
-                return False
-
-    cursor.close()
-    db.close()
-    return True
-
-
-# Fonction pour obtenir les notes précédentes d'un élève pour une matière
-def get_notes_eleve_precedentes(eleve_name=None, matricule_eleve=None, matiere=None, trimestre_precedent=None):
-    db = get_db_connection()
-    cursor = db.cursor()
-
-    if matricule_eleve is not None:
-        # Utiliser le matricule de l'élève (pour le parent)
-        sql = """
-            SELECT n.note
-            FROM notes n
-            JOIN eleves e ON n.matricule_eleve = e.matricule_eleve
-            JOIN notes_trimestrielles ns ON n.id = ns.note_id
-            WHERE n.matricule_eleve = %s AND n.matiere = %s AND ns.trimestre = %s
-        """
-        cursor.execute(sql, (matricule_eleve, matiere, trimestre_precedent))
-    else:
-        # Utiliser le nom de l'élève (pour l'admin et l'admin principal)
-        sql = """
-            SELECT n.note
-            FROM notes n
-            JOIN eleves e ON n.matricule_eleve = e.matricule_eleve
-            JOIN notes_trimestrielles ns ON n.id = ns.note_id
-            WHERE CONCAT(e.nom, ' ', e.prenom) = %s AND n.matiere = %s AND ns.trimestre = %s
-        """
-        cursor.execute(sql, (eleve_name, matiere, trimestre_precedent))
-
+    cursor.execute(sql, (matricule_eleve, matiere, trimestre_precedent))
     result = cursor.fetchall()
-    cursor.close()
-    db.close()
+    conn.close()
     return result
 
-# Fonction pour calculer la moyenne pondérée
 def calculer_moyenne_ponderee(class_name, notes_eleve):
     somme_ponderee = 0
     somme_coefficients = 0
-
     for matiere, note in notes_eleve.items():
-        coefficient = coefficients.get(class_name, {}).get(matiere, 1)  # Coefficient par défaut à 1 si non trouvé
+        coefficient = coefficients.get(class_name, {}).get(matiere, 1)
         somme_ponderee += note * coefficient
         somme_coefficients += coefficient
-
     moyenne_ponderee = round(somme_ponderee / somme_coefficients, 2) if somme_coefficients > 0 else "Non applicable"
-
-    
     return moyenne_ponderee
 
 

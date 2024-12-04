@@ -1,20 +1,18 @@
 import streamlit as st
 from datetime import time, datetime
-import mysql.connector
+import sqlite3
 import re
 
 def load_css(file_name):
     with open(file_name) as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
+DB_PATH = "utils/collegefoganggenies_db.sqlite"      
+
+# Fonction pour établir la connexion à la base de données SQLite
 def get_db_connection():
-    mydb = mysql.connector.connect(
-        host="localhost",
-        user="gelito01",
-        password="admin@01",
-        database="collegefoganggenies_db"
-    )
-    return mydb
+    conn = sqlite3.connect(DB_PATH)
+    return conn
 
 def is_valid_time(time_str):
     """Check if the input time string is valid in HH:MM format."""
@@ -229,76 +227,89 @@ def visualisation_presence_journaliere():
                 st.rerun()
 
 def enregistrer_presence(eleve_selectionne, jour, heure_entree, heure_sortie, heures_absence, decision, minutes_retard):
-    db = get_db_connection()
-    cursor = db.cursor()
-
-    matricule_eleve = get_matricule_by_nom_prenom(eleve_selectionne)
-    if matricule_eleve:
-        # Ajout de la colonne 'minutes_retard' dans l'INSERT SQL
-        sql = """
-            INSERT INTO presences (matricule_eleve, date, heure_entree, heure_sortie, heures_absence, decision, minutes_retard)
-            VALUES (%s, %s, %s, %s, %s, %s, %s)
-        """
-        cursor.execute(sql, (matricule_eleve, jour, heure_entree, heure_sortie, heures_absence, decision, minutes_retard))
-        db.commit()
-
-    cursor.close()
-    db.close()
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        matricule_eleve = get_matricule_by_nom_prenom(eleve_selectionne)
+        if matricule_eleve:
+            sql = """
+                INSERT INTO presences (matricule_eleve, date, heure_entree, heure_sortie, heures_absence, decision, minutes_retard)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            """
+            cursor.execute(sql, (matricule_eleve, jour, heure_entree, heure_sortie, heures_absence, decision, minutes_retard))
+            conn.commit()
+    except sqlite3.Error as e:
+        st.error(f"Erreur lors de l'enregistrement de la présence : {e}")
+    finally:
+        cursor.close()
+        conn.close()
 
 def get_matricule_by_nom_prenom(eleve_name):
-    db = get_db_connection()
-    cursor = db.cursor()
-    sql = "SELECT matricule_eleve FROM eleves WHERE CONCAT(nom, ' ', prenom) = %s"
-    cursor.execute(sql, (eleve_name,))
-    result = cursor.fetchone()
-    cursor.close()
-    db.close()
-
-    return result[0] if result else None
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        sql = "SELECT matricule_eleve FROM eleves WHERE nom || ' ' || prenom = ?"
+        cursor.execute(sql, (eleve_name,))
+        result = cursor.fetchone()
+        return result[0] if result else None
+    except sqlite3.Error as e:
+        st.error(f"Erreur lors de la récupération du matricule : {e}")
+        return None
+    finally:
+        cursor.close()
+        conn.close()
 
 def get_eleves_from_class(class_name):
-    db = get_db_connection()
-    cursor = db.cursor()
-    sql = "SELECT matricule_eleve, nom, prenom FROM eleves WHERE classe = %s"
-    cursor.execute(sql, (class_name,))
-    eleves = cursor.fetchall()
-    cursor.close()
-    db.close()
-
-    return [f"{row[1]} {row[2]}" for row in eleves]
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        sql = "SELECT matricule_eleve, nom, prenom FROM eleves WHERE classe = ?"
+        cursor.execute(sql, (class_name,))
+        eleves = cursor.fetchall()
+        return [f"{row[1]} {row[2]}" for row in eleves]
+    except sqlite3.Error as e:
+        st.error(f"Erreur lors de la récupération des élèves : {e}")
+        return []
+    finally:
+        cursor.close()
+        conn.close()
 
 def get_presence_eleve(matricule_eleve):
-    db = get_db_connection()
-    cursor = db.cursor(dictionary=True)  # Use dictionary=True to return a dictionary
-    sql = """
-        SELECT date, heure_entree, heure_sortie, heures_absence, decision, minutes_retard 
-        FROM presences 
-        WHERE matricule_eleve = %s
-        ORDER BY date DESC LIMIT 1
-    """
-    cursor.execute(sql, (matricule_eleve,))
-    presence = cursor.fetchone()
-    cursor.close()
-    db.close()
-
-    return presence  # Return the fetched record (or None if no record is found)
-
-
-
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    try:
+        sql = """
+            SELECT date, heure_entree, heure_sortie, heures_absence, decision, minutes_retard 
+            FROM presences 
+            WHERE matricule_eleve = ?
+            ORDER BY date DESC LIMIT 1
+        """
+        cursor.execute(sql, (matricule_eleve,))
+        presence = cursor.fetchone()
+        return presence
+    except sqlite3.Error as e:
+        st.error(f"Erreur lors de la récupération de la présence : {e}")
+        return None
+    finally:
+        cursor.close()
+        conn.close()
 
 def get_eleve_by_matricule(matricule_eleve):
-    db = get_db_connection()
-    cursor = db.cursor()
-    sql = "SELECT nom, prenom FROM eleves WHERE matricule_eleve = %s"
-    cursor.execute(sql, (matricule_eleve,))
-    result = cursor.fetchone()
-    cursor.close()
-    db.close()
-
-    if result:
-        return f"{result[0]} {result[1]}"
-    return None
-
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        sql = "SELECT nom, prenom FROM eleves WHERE matricule_eleve = ?"
+        cursor.execute(sql, (matricule_eleve,))
+        result = cursor.fetchone()
+        if result:
+            return f"{result[0]} {result[1]}"
+        return None
+    except sqlite3.Error as e:
+        st.error(f"Erreur lors de la récupération de l'élève : {e}")
+        return None
+    finally:
+        cursor.close()
+        conn.close()
 
 def main():
     presence_journaliere_page()

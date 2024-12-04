@@ -1,8 +1,8 @@
 import streamlit as st
 from pages import page_d_evolution
-import mysql.connector
-import os
 
+import os
+import sqlite3
 ADMIN_ID = "admin123"
 ADMIN_PASSWORD = "password123"
 TEACHER_ID = "teacher123"
@@ -14,46 +14,45 @@ def load_css(file_name):
     with open(file_name) as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-# Fonction pour établir la connexion à la base de données
+DB_PATH = "utils/collegefoganggenies_db.sqlite"      
+
+# Fonction pour établir la connexion à la base de données SQLite
 def get_db_connection():
-    mydb = mysql.connector.connect(
-        host="localhost",
-        user="gelito01",
-        password="admin@01",
-        database="collegefoganggenies_db"
-    )
-    return mydb
+    conn = sqlite3.connect(DB_PATH)
+    return conn
 
-# Fonction d'authentification
+# Fonction d'authentification (modifiée pour SQLite)
 def authenticate_user(username, password, role):
-    db = get_db_connection()
-    cursor = db.cursor()
+    conn = get_db_connection()
+    cursor = conn.cursor()
 
-    # Vérifiez si l'utilisateur existe et si le mot de passe est correct
-    if role == 'admin':
-        sql = "SELECT * FROM administration WHERE identifiant = %s AND mot_de_passe = %s"
-        cursor.execute(sql, (username, password))  # Passez les deux paramètres
-    elif role == 'teacher':
-        sql = "SELECT * FROM enseignants WHERE identifiant = %s AND mot_de_passe = %s"
-        cursor.execute(sql, (username, password))  # Passez les deux paramètres
-    elif role == 'admin_principal':
-        sql = "SELECT * FROM administrateur_principal WHERE identifiant = %s AND mot_de_passe = %s"
-        cursor.execute(sql, (username, password))  # Passez les deux paramètres
-    elif role == 'parent':
-        # Pour les parents, le mot de passe est le matricule de l'élève
-        sql = "SELECT * FROM eleves WHERE matricule_eleve = %s"  
-        cursor.execute(sql, (username,))  # Pas besoin de passer le mot de passe pour le parent
-    else:
-        return False, "Rôle invalide."
+    try:
+        if role == 'admin':
+            sql = "SELECT * FROM administration WHERE identifiant = ? AND mot_de_passe = ?"
+            cursor.execute(sql, (username, password))
+        elif role == 'teacher':
+            sql = "SELECT * FROM enseignants WHERE identifiant = ? AND mot_de_passe = ?"
+            cursor.execute(sql, (username, password))
+        elif role == 'admin_principal':
+            sql = "SELECT * FROM administrateur_principal WHERE identifiant = ? AND mot_de_passe = ?"
+            cursor.execute(sql, (username, password))
+        elif role == 'parent':
+            sql = "SELECT * FROM eleves WHERE matricule_eleve = ?"
+            cursor.execute(sql, (username,))
+        else:
+            conn.close()
+            return False, "Rôle invalide."
 
-    result = cursor.fetchone()
-    cursor.close()
-    db.close()
-
-    if result:
-        return True, None
-    else:
-        return False, "Nom d'utilisateur ou mot de passe incorrect."
+        result = cursor.fetchone()
+        if result:
+            conn.close()
+            return True, None
+        else:
+            conn.close()
+            return False, "Nom d'utilisateur ou mot de passe incorrect."
+    except sqlite3.Error as e:
+        conn.close()
+        return False, f"Erreur de base de données : {e}"
 
 def show_admin_login():
     st.subheader("Connexion Administration")
