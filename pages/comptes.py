@@ -101,7 +101,7 @@ def show_admin_principal_login():
 
 def show_parent_login():
     st.subheader("Connexion Parent")
-    parent_id = st.text_input("Matricule de l'enfant")  # Saisir le matricule de l'enfant
+    parent_id = st.text_input("Entrer le Matricule de l'élève")  # Saisir le matricule de l'enfant
 
     if st.button("Se connecter"):
         # On utilise le même matricule comme identifiant et mot de passe
