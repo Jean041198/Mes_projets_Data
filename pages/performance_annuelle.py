@@ -135,7 +135,7 @@ def performance_annuelle_page():
     # Logo en haut de la page
     col1, col2, col3 = st.columns([1.5, 2, 0.5])
     with col2:
-        st.image("static/images/logo.png", width=150)
+        st.image("static/images/logo.png", use_container_width=True)
 
     # Mode Visualisation des Performances (pas de saisie)
     st.title("Visualisation des performances et prise de décisions")

@@ -120,7 +120,7 @@ def comptes_page():
 
     col1, col2, col3 = st.columns([1.5, 2, 0.5])
     with col2:
-        st.image("static/images/logo.png", width=150)
+        st.image("static/images/logo.png", use_container_width=True)
 
     if st.session_state['page'] == "Page des Comptes":
         st.title("Page des Comptes")

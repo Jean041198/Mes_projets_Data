@@ -24,7 +24,7 @@ def presence_journaliere_page():
 
     col1, col2, col3 = st.columns([1.5, 2, 0.5])
     with col2:
-        st.image("static/images/logo.png", width=150)
+        st.image("static/images/logo.png", use_container_width=True)
   # Initialisation de st.session_state['class'] si elle n'existe pas.  C'est CRUCIAL !
     if 'class' not in st.session_state:
         st.session_state['class'] = '' # Ou une valeur par défaut appropriée

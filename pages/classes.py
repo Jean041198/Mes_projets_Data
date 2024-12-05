@@ -58,7 +58,7 @@ def classes_page():
     load_css("static/styles/styles.css")
     col1, col2, col3 = st.columns([1.5, 2, 0.5])
     with col2:
-        st.image("static/images/logo.png", width=150)
+        st.image("static/images/logo.png", use_container_width=True)
     st.title("Page des Classes")
 
     if 'francophone_clicked' not in st.session_state:

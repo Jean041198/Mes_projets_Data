@@ -1,6 +1,7 @@
 /* Style global de l'application */
 .stApp {
     background-color: #001f3f; /* Bleu marine */
+    font-family: sans-serif; /* Choisir une police de caractères appropriée */
 }
 
 /* Style général pour tout le texte sauf le menu */
@@ -13,13 +14,8 @@ div, p, h1, h2, h3, h4, h5, h6 {
     background-color: #87CEEB !important; /* SkyBlue */
 }
 
-/* Style général pour tout le texte sauf le menu */
-div, p, h1, h2, h3, h4, h5, h6 {
-    color: #FFA500; /* Orange par défaut pour les textes */
-}
-
 /* Style spécifique pour le texte dans la sidebar */
- .stSidebar p, .stSidebar h1, .stSidebar h2, .stSidebar h3, .stSidebar h4, .stSidebar h5, .stSidebar h6 {
+.stSidebar p, .stSidebar h1, .stSidebar h2, .stSidebar h3, .stSidebar h4, .stSidebar h5, .stSidebar h6 {
     color: #000000 !important; /* Noir pour la sidebar */
 }
 
@@ -49,6 +45,10 @@ div, p, h1, h2, h3, h4, h5, h6 {
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
+    width: 100%; /* Largeur pleine largeur pour les petits écrans */
+    box-sizing: border-box; /* Inclure le padding dans la largeur */
+    margin-bottom: 10px; /* Espacement entre les boutons */
+
 }
 
 /* Style des boutons lors du survol */
@@ -56,16 +56,12 @@ div, p, h1, h2, h3, h4, h5, h6 {
     background-color: #555555; /* Gris plus clair au hover */
 }
 
-/* Style des colonnes contenant les images */
-.col1, .col2, .col3 {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 /* Style de l'image du logo */
 .stImage img {
-    width: 100px;
+    max-width: 50%; /* Largeur maximale de l'image, s'adapte à l'écran */
+    height: auto; /* Hauteur automatique pour maintenir les proportions */
+    margin: 10px auto; /* Centrer l'image */
+    display: block; /* Assurer que l'image est un bloc et occupe toute la largeur disponible*/
 }
 
 /* Style pour les champs de texte */
@@ -73,8 +69,11 @@ div, p, h1, h2, h3, h4, h5, h6 {
     border-radius: 8px;
     padding: 8px;
     font-size: 16px;
-    margin-bottom: 10px;
+    width: 100%; /* Largeur pleine largeur pour les petits écrans */
+    box-sizing: border-box; /* Inclure le padding dans la largeur */
+    margin-bottom: 10px; /* Espacement entre les champs de texte */
 }
+
 
 /* Style pour les notifications de succès */
 .stAlert-success {
@@ -99,4 +98,26 @@ div, p, h1, h2, h3, h4, h5, h6 {
     font-size: 18px;
     margin-bottom: 5px;
     margin-top: 5px;
+}
+
+
+/* Media Queries pour l'adaptation responsive */
+@media (max-width: 768px) { /* Tablettes et smartphones */
+    .stSidebar {
+        width: 100%; /* Sidebar pleine largeur */
+    }
+    .stColumn { /* Style les colonnes */
+        flex-direction: column; /* Empiler les éléments verticalement */
+    }
+    .stButton>button {
+        width: 100%; /* Boutons sur toute la largeur */
+        font-size: 14px; /* police plus petite sur mobile */
+    }
+    .stTextInput>input {
+        font-size: 14px; /* police plus petite sur mobile */
+    }
+    .stImage img {
+        width: 80%; /* réduire la largeur de l'image sur mobile */
+        margin: 5px auto;
+    }
 }
