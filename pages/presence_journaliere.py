@@ -284,19 +284,30 @@ def get_eleves_from_class(class_name):
 
 def get_presence_eleve(matricule_eleve):
     conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor()  # Pas de dictionary=True ici
     try:
         sql = """
-            SELECT date, heure_entree, heure_sortie, heures_absence, decision, minutes_retard 
-            FROM presences 
+            SELECT date, heure_entree, heure_sortie, heures_absence, decision, minutes_retard
+            FROM presences
             WHERE matricule_eleve = ?
             ORDER BY date DESC LIMIT 1
         """
         cursor.execute(sql, (matricule_eleve,))
-        presence = cursor.fetchone()
-        return presence
+        row = cursor.fetchone()  # Récupération sous forme de tuple
+        if row:
+            presence = {
+                'date': row[0],
+                'heure_entree': row[1],
+                'heure_sortie': row[2],
+                'heures_absence': row[3],
+                'decision': row[4],
+                'minutes_retard': row[5]
+            }
+            return presence
+        else:
+            return None
     except sqlite3.Error as e:
-        st.error(f"Erreur lors de la récupération de la présence : {e}")
+        st.error(f"Erreur lors de la récupération de la présence : {e}")
         return None
     finally:
         cursor.close()

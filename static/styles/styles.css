@@ -58,7 +58,7 @@ div, p, h1, h2, h3, h4, h5, h6 {
 
 /* Style de l'image du logo */
 .stImage img {
-    max-width: 50%; /* Largeur maximale de l'image, s'adapte à l'écran */
+    max-width: 30%; /* Largeur maximale de l'image, s'adapte à l'écran */
     height: auto; /* Hauteur automatique pour maintenir les proportions */
     margin: 10px auto; /* Centrer l'image */
     display: block; /* Assurer que l'image est un bloc et occupe toute la largeur disponible*/
