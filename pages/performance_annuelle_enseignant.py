@@ -310,20 +310,23 @@ def get_eleves_from_class(class_name):
 
     # Fonction pour obtenir le nom de l'enseignant à partir d'une matière
 def get_enseignant_nom(matiere):
-    db = get_db_connection()
-    cursor = db.cursor()
-    sql = """
-        SELECT e.nom
-        FROM enseignants e
-        JOIN matieres_des_enseignants me ON e.identifiant = me.identifiant_enseignant
-        WHERE me.matiere_enseignee = %s
-    """
-    cursor.execute(sql, (matiere,))
-    result = cursor.fetchone()
-    cursor.close()
-    db.close()
-
-    return result[0] if result else "N/A"
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        sql = """
+            SELECT e.nom
+            FROM enseignants e
+            JOIN matieres_des_enseignants me ON e.identifiant = me.identifiant_enseignant
+            WHERE me.matiere_enseignee = ?
+        """
+        cursor.execute(sql, (matiere,))
+        return cursor.fetchone()[0] if cursor.fetchone() else "N/A"
+    except (sqlite3.Error, IndexError) as e: #Gestion de l'erreur si fetchone() retourne None ou une liste vide.
+        st.error(f"Erreur lors de la récupération du nom de l'enseignant : {e}")
+        return "N/A"
+    finally:
+        cursor.close()
+        conn.close()
 
 
 # Fonction pour obtenir les matières enseignées dans une classe

@@ -25,8 +25,10 @@ def presence_journaliere_page():
     col1, col2, col3 = st.columns([1.5, 2, 0.5])
     with col2:
         st.image("static/images/logo.png", width=150)
+  # Initialisation de st.session_state['class'] si elle n'existe pas.  C'est CRUCIAL !
+    if 'class' not in st.session_state:
+        st.session_state['class'] = '' # Ou une valeur par défaut appropriée
 
-    # Vérifiez le mode de visualisation et le rôle
     if not st.session_state.get('visualisation_mode', False):
         # Si le parent est connecté, il est en mode visualisation
         if st.session_state.get('role') == 'parent':
@@ -70,6 +72,12 @@ def presence_journaliere_page():
             else:
                 # Mode de saisie pour l'administrateur
                 eleves = get_eleves_from_class(st.session_state['class'])
+                if not eleves:
+                    st.warning("Veuillez sélectionner une classe.")
+                    if st.button("Retour"):
+                        st.session_state['page'] = "Page des Classes"
+                        st.rerun()
+                    return # stop execution here if no students
                 eleves_selectionnes = st.selectbox("Élève", eleves, key="select_eleve", index=None)
                 
                 # Input pour l'heure d'entrée
@@ -310,7 +318,6 @@ def get_eleve_by_matricule(matricule_eleve):
     finally:
         cursor.close()
         conn.close()
-
 def main():
     presence_journaliere_page()
 

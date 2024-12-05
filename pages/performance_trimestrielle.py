@@ -161,19 +161,17 @@ def performance_trimestrielle_page():
                 st.subheader("Statistiques descriptives")
                 
                 mediane = round(median(notes), 2)
-                ecart_type = round(stdev(notes), 2) if len(notes) > 1 else "Non applicable"
+                
 
               
                 st.write(f"Médiane : {mediane}/20")
-                st.write(f"Écart-type : {ecart_type}")
+               
 
                 # Interprétation statistique
                 st.subheader("Interprétation statistique")
                 st.write(f"La médiane des notes de l'élève est de {mediane}/20. Cela signifie que la moitié des notes de l'élève sont supérieures à "
                          f"{mediane} et l'autre moitié sont inférieures.")
-                st.write(f"L'écart-type est de {ecart_type}. Un écart-type faible indique que les notes sont concentrées autour "
-                         f"de la moyenne, tandis qu'un écart-type élevé indique une plus grande dispersion des notes.")
-
+                
                 # Graphique avec Seaborn
                 st.subheader("Graphiques d'évolution")
                 sns.set_theme(style="whitegrid")
@@ -190,8 +188,9 @@ def performance_trimestrielle_page():
                 st.pyplot(fig)
 
                  # Calcul de la moyenne pondérée
+                st.subheader("MOYENNE GENERALE DE L'ELEVE")
                 moyenne_ponderee = calculer_moyenne_ponderee(st.session_state['class'], notes_eleve)
-                st.subheader("Moyenne de l'élève")
+                
                 st.write(f"Moyenne de l'élève : {moyenne_ponderee}/20")
 
                   # Interprétation de la moyenne pondérée
@@ -256,18 +255,16 @@ def performance_trimestrielle_page():
                     st.subheader("Statistiques descriptives")
                     
                     mediane = round(median(notes), 2)
-                    ecart_type = round(stdev(notes), 2) if len(notes) > 1 else "Non applicable"
+                    
 
                     
                     st.write(f"Médiane : {mediane}/20")
-                    st.write(f"Écart-type : {ecart_type}")
-
+                    
                     # Interprétation statistique
                     st.subheader("Interprétation statistique")
                     st.write(f"La médiane des notes de l'élève est de {mediane}/20. Cela signifie que la moitié des notes de l'élève sont supérieures à "
                          f"{mediane} et l'autre moitié sont inférieures.")
-                    st.write(f"L'écart-type est de {ecart_type}. Un écart-type faible indique que les notes sont concentrées autour "
-                         f"de la moyenne, tandis qu'un écart-type élevé indique une plus grande dispersion des notes.")
+                    
 
                     # Graphique avec Seaborn
                     st.subheader("Graphiques d'évolution")
@@ -285,8 +282,9 @@ def performance_trimestrielle_page():
                     st.pyplot(fig)
 
                      # Calcul de la moyenne pondérée
+                    st.subheader("MOYENNE GENERALE DE L'ELEVE")
                     moyenne_ponderee = calculer_moyenne_ponderee(st.session_state['class'], notes_eleve)
-                    st.subheader("Moyenne de l'élève")
+                    
                     st.write(f"Moyenne de l'élève : {moyenne_ponderee}/20")
 
                     # Interprétation de la moyenne pondérée

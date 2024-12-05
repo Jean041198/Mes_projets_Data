@@ -7,7 +7,7 @@ def load_css(file_name):
 
 
 
-# Fonction pour établir la connexion à la base de données
+
 # Fonction pour établir la connexion à la base de données
 DB_PATH = "utils/collegefoganggenies_db.sqlite"      
 
