@@ -27,7 +27,7 @@ def main():
     
     # Définir la page par défaut si elle n'existe pas encore dans l'état de la session
     if 'page' not in st.session_state:
-        st.session_state['page'] = 'Application'
+        st.session_state['page'] = 'Page des Comptes'
     
     # Définir le mode de visualisation par défaut si nécessaire
     if 'visualisation_mode' not in st.session_state:
@@ -98,7 +98,7 @@ def main():
         st.title("À propos de l'application")
         st.write("## Guide d' utilisation")
         st.markdown("""
-
+         ---
         Ce guide décrit les fonctionnalités de l'application pour chaque type d'utilisateur.
          **Tous les utilisateurs utilisent la barre latérale pour naviguer entre les pages de l'application.** 
 
