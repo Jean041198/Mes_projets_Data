@@ -5,7 +5,7 @@ from pages import performance_trimestrielle, performance_annuelle
 from pages import performance_sequentielle_enseignant, performance_trimestrielle_enseignant
 from pages import performance_annuelle_enseignant
 import sqlite3
-import os
+
 
 
 DB_PATH = "utils/collegefoganggenies_db.sqlite"      

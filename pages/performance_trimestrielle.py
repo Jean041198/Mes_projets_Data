@@ -187,11 +187,16 @@ def performance_trimestrielle_page():
                 ax.set_xticklabels(matieres, rotation=45, ha='right')
                 st.pyplot(fig)
 
-                 # Calcul de la moyenne pondérée
+                 # Récupérer la classe de l'élève depuis la base de données
+                classe_eleve = get_classe_eleve(matricule_eleve)
+
+                # Calcul de la moyenne pondérée
                 st.subheader("MOYENNE GENERALE DE L'ELEVE")
-                moyenne_ponderee = calculer_moyenne_ponderee(st.session_state['class'], notes_eleve)
-                
-                st.write(f"Moyenne de l'élève : {moyenne_ponderee}/20")
+                if classe_eleve:
+                    moyenne_ponderee = calculer_moyenne_ponderee(classe_eleve, notes_eleve)
+                    st.write(f"Moyenne de l'élève : {moyenne_ponderee}/20")
+                else:
+                    st.error("La classe de l'élève n'a pas été trouvée dans la base de données.")
 
                   # Interprétation de la moyenne pondérée
                 if moyenne_ponderee != "Non applicable":
@@ -444,6 +449,16 @@ def get_notes_eleve_precedentes(matricule_eleve, matiere, trimestre_precedent):
     result = cursor.fetchall()
     conn.close()
     return result
+
+# Fonction pour récupérer la classe de l'élève
+def get_classe_eleve(matricule_eleve):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    sql = "SELECT classe FROM eleves WHERE matricule_eleve = ?"
+    cursor.execute(sql, (matricule_eleve,))
+    result = cursor.fetchone()
+    conn.close()
+    return result[0] if result else None  
 
 def calculer_moyenne_ponderee(class_name, notes):
     somme_ponderee = 0
