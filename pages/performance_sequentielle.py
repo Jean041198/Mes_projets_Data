@@ -449,10 +449,10 @@ def get_notes_eleve_precedentes(matricule_eleve, matiere, sequence_precedente):
     conn.close()
     return result
 
-def calculer_moyenne_ponderee(class_name, notes_eleve):
+def calculer_moyenne_ponderee(class_name, notes):
     somme_ponderee = 0
     somme_coefficients = 0
-    for matiere, note in notes_eleve.items():
+    for matiere, note in notes.items():
         coefficient = coefficients.get(class_name, {}).get(matiere, 1)
         somme_ponderee += note * coefficient
         somme_coefficients += coefficient

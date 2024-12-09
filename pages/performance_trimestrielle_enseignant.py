@@ -501,11 +501,11 @@ def get_notes_eleve_precedentes_trimestre(eleve_name, matiere, trimestre_precede
 
 
 # Fonction pour calculer la moyenne pondérée
-def calculer_moyenne_ponderee(class_name, notes_eleve):
+def calculer_moyenne_ponderee(class_name, notes):
     somme_ponderee = 0
     somme_coefficients = 0
 
-    for matiere, note in notes_eleve.items():
+    for matiere, note in notes.items():
         coefficient = coefficients.get(class_name, {}).get(matiere, 1)  # Coefficient par défaut à 1 si non trouvé
         somme_ponderee += note * coefficient
         somme_coefficients += coefficient
