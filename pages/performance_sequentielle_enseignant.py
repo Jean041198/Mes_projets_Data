@@ -33,7 +33,7 @@ coefficients = {
         'Etude de texte': 1,
         'Espagnol': 2,
         'Sport': 2,
-        'Langue et culture nationale': 1,
+        'Langue et Culture Nationale': 1,
         'Éducation Civique et Morale (ECM)':2,
         'Géographie':2,
         'Travail manuel':1
@@ -51,7 +51,7 @@ coefficients = {
         'Etude de texte': 1,
         'Espagnol': 2,
         'Sport': 2,
-        'Langue et culture nationale': 1,
+        'Langue et Culture Nationale': 1,
         'Éducation Civique et Morale (ECM)':2,
         'Géographie':2,
         'Travail manuel':1
@@ -69,21 +69,21 @@ coefficients = {
         'Etude de texte': 1,
         'Espagnol': 2,
         'Sport': 2,
-        'Langue et culture nationale': 1,
-        'Physique chimie technologie': 2,
+        'Langue et Culture Nationale': 1,
+        'Physique Chimie Technologie': 2,
         'Éducation Civique et Morale (ECM)':2,
         'Géographie':2,
         'Travail manuel':1
     },
-    'Form 1': {
+    'Form1': {
         'English Language': 4,
         'Food and Nutrition': 2,
-        'Literature': 2,
+        'literature': 2,
         'French': 4,
         'History': 2,
         'Geography': 2,
         'Citizenship': 2,
-        'Mathematics': 2,
+        'Mathematics': 4,
         'Chemistry': 2,
         'Biology': 2,
         'Computer Sciences': 2,
@@ -91,15 +91,15 @@ coefficients = {
         'Physics': 2,
         'Manual labour':1
     },
-    'Form 2': {
+    'Form2': {
         'English Language': 4,
         'Food and Nutrition': 2,
-        'Literature': 2,
+        'literature': 2,
         'French': 4,
         'History': 2,
         'Geography': 2,
         'Citizenship': 2,
-        'Mathematics': 2,
+        'Mathematics': 4,
         'Chemistry': 2,
         'Biology': 2,
         'Computer Sciences': 2,
@@ -107,15 +107,15 @@ coefficients = {
         'Physics': 2,
         'Manual labour':1
     },
-    'Form 3': {
+    'Form3': {
         'English Language': 4,
         'Food and Nutrition': 2,
-        'Literature': 2,
+        'literature': 2,
         'French': 4,
         'History': 2,
         'Geography': 2,
         'Citizenship': 2,
-        'Mathematics': 2,
+        'Mathematics': 4,
         'Chemistry': 2,
         'Biology': 2,
         'Computer Sciences': 2,
@@ -460,10 +460,10 @@ def get_notes_eleve_precedentes(eleve_name, matiere, sequence_precedente):
     conn.close()
     return result
 
-def calculer_moyenne_ponderee(class_name, notes_eleve):
+def calculer_moyenne_ponderee(class_name, notes):
     somme_ponderee = 0
     somme_coefficients = 0
-    for matiere, note in notes_eleve.items():
+    for matiere, note in notes.items():
         coefficient = coefficients.get(class_name, {}).get(matiere, 1)
         somme_ponderee += note * coefficient
         somme_coefficients += coefficient
