@@ -7,7 +7,7 @@ from statistics import mean, median, stdev
 def load_css(file_name):
     with open(file_name) as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
-        6
+        
 DB_PATH = "utils/collegefoganggenies_db.sqlite"      
 
 # Fonction pour établir la connexion à la base de données SQLite
