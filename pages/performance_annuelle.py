@@ -335,7 +335,7 @@ def performance_annuelle_page():
 def get_eleves_from_class(class_name):
     db = get_db_connection()
     cursor = db.cursor()
-    sql = "SELECT matricule_eleve, nom, prenom FROM eleves WHERE classe = %s"
+    sql = "SELECT matricule_eleve, nom, prenom FROM eleves WHERE classe = ?"
     cursor.execute(sql, (class_name,))
     eleves = cursor.fetchall()
     cursor.close()

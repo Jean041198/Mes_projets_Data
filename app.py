@@ -53,7 +53,7 @@ def main():
         options, 
         index=options.index(st.session_state['page'])
     )
-
+   
     # Mettre à jour l'état de la session avec la page sélectionnée
     if st.session_state['page'] != selected_page:
         st.session_state['page'] = selected_page
@@ -93,7 +93,7 @@ def main():
     elif st.session_state['page'] == "Performance Trimestrielle Enseignant":
          performance_trimestrielle_enseignant.performance_trimestrielle_enseignant_page()
     elif st.session_state['page'] == "Performance Annuelle Enseignant":
-         performance_annuelle_enseignant.performance_annuelle_enseignant_page()
+         performance_annuelle_enseignant.performance_annuelle_enseignant_page(),
     elif st.session_state['page'] == "Application":
         st.title("À propos de l'application")
         st.write("## Guide d' utilisation")
