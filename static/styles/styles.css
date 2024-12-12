@@ -48,7 +48,6 @@ div, p, h1, h2, h3, h4, h5, h6 {
     width: 100%; /* Largeur pleine largeur pour les petits écrans */
     box-sizing: border-box; /* Inclure le padding dans la largeur */
     margin-bottom: 10px; /* Espacement entre les boutons */
-
 }
 
 /* Style des boutons lors du survol */
@@ -119,5 +118,17 @@ div, p, h1, h2, h3, h4, h5, h6 {
     .stImage img {
         width: 80%; /* réduire la largeur de l'image sur mobile */
         margin: 5px auto;
+    }
+    h1, h2, h3, h4, h5, h6 { /* Réduire la taille des titres sur les petits écrans */
+        font-size: 1.2em; /* police plus petite sur mobile */
+    }
+    .chart-container { /* Conteneur du graphique */
+        width: 100%; /* Largeur pleine largeur sur mobile */
+        height: auto; /* Hauteur automatique pour s'adapter au contenu */
+    }
+
+    .chart-container svg {
+      width: 100%; /* Largeur pleine largeur pour le graphique SVG */
+      height: auto; /* Hauteur automatique pour maintenir les proportions */
     }
 }

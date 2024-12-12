@@ -229,7 +229,9 @@ def visualisation_performance():
 
                 # Rotation des labels pour les matières pour éviter le chevauchement
                 ax.set_xticklabels(matieres, rotation=45, ha='right')
+                st.markdown(f'<div class="chart-container">', unsafe_allow_html=True)
                 st.pyplot(fig)
+                st.markdown(f'</div>', unsafe_allow_html=True)
                 
 
                 # Calcul de la moyenne pondérée

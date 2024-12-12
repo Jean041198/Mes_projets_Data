@@ -185,7 +185,9 @@ def performance_trimestrielle_page():
 
                 # Rotation des labels pour les matières pour éviter le chevauchement
                 ax.set_xticklabels(matieres, rotation=45, ha='right')
+                st.markdown(f'<div class="chart-container">', unsafe_allow_html=True)
                 st.pyplot(fig)
+                st.markdown(f'</div>', unsafe_allow_html=True)
 
                  # Récupérer la classe de l'élève depuis la base de données
                 classe_eleve = get_classe_eleve(matricule_eleve)
@@ -284,7 +286,9 @@ def performance_trimestrielle_page():
 
                     # Rotation des labels pour les matières pour éviter le chevauchement
                     ax.set_xticklabels(matieres, rotation=45, ha='right')
+                    st.markdown(f'<div class="chart-container">', unsafe_allow_html=True)
                     st.pyplot(fig)
+                    st.markdown(f'</div>', unsafe_allow_html=True)
 
                      # Calcul de la moyenne pondérée
                     st.subheader("MOYENNE GENERALE DE L'ELEVE")

@@ -187,7 +187,9 @@ def performance_annuelle_page():
 
                 # Rotation des labels pour les matières pour éviter le chevauchement
                 ax.set_xticklabels(matieres, rotation=45, ha='right')
+                st.markdown(f'<div class="chart-container">', unsafe_allow_html=True)
                 st.pyplot(fig)
+                st.markdown(f'</div>', unsafe_allow_html=True)
 
                 # Récupérer la classe de l'élève depuis la base de données
                 classe_eleve = get_classe_eleve(matricule_eleve)
@@ -279,7 +281,9 @@ def performance_annuelle_page():
 
                     # Rotation des labels pour les matières pour éviter le chevauchement
                     ax.set_xticklabels(matieres, rotation=45, ha='right')
+                    st.markdown(f'<div class="chart-container">', unsafe_allow_html=True)
                     st.pyplot(fig)
+                    st.markdown(f'</div>', unsafe_allow_html=True)
 
                     # Calcul de la moyenne pondérée
                     moyenne_ponderee = calculer_moyenne_ponderee(st.session_state['class'], notes_eleve)
@@ -373,7 +377,7 @@ def get_enseignant_nom(matiere):
 
 
 
-# Fonction pour obtenir les informations d'un élève par son matricule
+
 # Fonction pour obtenir les informations d'un élève par son matricule
 def get_eleve_info(matricule_eleve):
     conn = get_db_connection()

@@ -228,9 +228,11 @@ def visualisation_performance():
                 # Ajouter une courbe d'évolution des notes
                 sns.lineplot(x=matieres, y=notes, ax=ax, color='black', marker='o')
 
-                # Rotation des labels pour les matières pour éviter le chevauchement
+                 # Rotation des labels pour les matières pour éviter le chevauchement
                 ax.set_xticklabels(matieres, rotation=45, ha='right')
+                st.markdown(f'<div class="chart-container">', unsafe_allow_html=True)
                 st.pyplot(fig)
+                st.markdown(f'</div>', unsafe_allow_html=True)
                 
 
                 # Calcul de la moyenne pondérée
