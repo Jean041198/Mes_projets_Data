@@ -252,8 +252,8 @@ def performance_sequentielle_page():
 
             # Afficher les éléments si un élève est sélectionné
             if eleve_selectionne:  
-                st.subheader(f"Notes de l'élève : {eleve_selectionne}")
                 
+                st.subheader(f"Notes de l'élève : {eleve_selectionne}")
                 # Afficher les notes de l'élève
                 notes_eleve = get_notes_eleve_sequentielles(eleve_name=eleve_selectionne) 
                 if notes_eleve:
