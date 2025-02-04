@@ -171,6 +171,7 @@ def presence_journaliere_page():
                         st.session_state['visualisation_mode'] = True
                         st.rerun() 
     else:
+        
         visualisation_presence_journaliere()
 
 

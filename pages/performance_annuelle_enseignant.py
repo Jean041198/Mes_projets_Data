@@ -289,7 +289,7 @@ def afficher_champs_et_enseignants(matieres):
         if matiere not in matieres_ajoutees: 
             matieres_ajoutees.append(matiere)  # Ajoutez la matière à la liste
             # Champ de saisie avec validation de la note
-            note = st.number_input(f"{matiere} /20", min_value=0, max_value=20, key=f"note_{matiere}") 
+            note = st.number_input(f"{matiere} /20", min_value=0.0, max_value=20.0, step=0.25,  key=f"note_{matiere}") 
 
             # Afficher le nom de l'enseignant avec un expandeur pour les détails
             enseignant_nom = matiere_data.get('nom')
