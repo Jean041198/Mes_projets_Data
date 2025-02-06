@@ -56,40 +56,69 @@ def authenticate_user(username, password, role):
 
 def show_admin_login():
     st.subheader("Connexion Administration")
-    admin_id = st.text_input("ID Administrateur")
-    admin_password = st.text_input("Mot de passe", type="password")
+    
+    if 'admin_id' not in st.session_state:
+        st.session_state['admin_id'] = ""
+    if 'admin_password' not in st.session_state:
+        st.session_state['admin_password'] = ""
+
+    admin_id = st.text_input("ID Administrateur", value=st.session_state['admin_id'])
+    admin_password = st.text_input("Mot de passe", type="password", value=st.session_state['admin_password'])
 
     if st.button("Se connecter"):
+        st.session_state['admin_id'] = admin_id  
+        st.session_state['admin_password'] = admin_password 
+        
         success, message = authenticate_user(admin_id, admin_password, 'admin')
         if success:
             st.success("Connexion réussie !")
             st.session_state['role'] = 'admin'
-            st.session_state['page'] = "Page d'évolution"  
+            st.session_state['page'] = "Page d'évolution"
             st.rerun()
         else:
             st.error(message)
+
 
 def show_teacher_login():
     st.subheader("Connexion Enseignant")
-    teacher_id = st.text_input("ID Enseignant")
-    teacher_password = st.text_input("Mot de passe", type="password")
+
+    if 'teacher_id' not in st.session_state:
+        st.session_state['teacher_id'] = ""
+    if 'teacher_password' not in st.session_state:
+        st.session_state['teacher_password'] = ""
+
+    teacher_id = st.text_input("ID Enseignant", value=st.session_state['teacher_id'])
+    teacher_password = st.text_input("Mot de passe", type="password", value=st.session_state['teacher_password'])
 
     if st.button("Se connecter"):
-        success, message = authenticate_user(teacher_id, TEACHER_PASSWORD, 'teacher')  
+        st.session_state['teacher_id'] = teacher_id
+        st.session_state['teacher_password'] = teacher_password
+
+        success, message = authenticate_user(teacher_id, teacher_password, 'teacher')
         if success:
             st.success("Connexion réussie !")
             st.session_state['role'] = 'teacher'
-            st.session_state['page'] = "Page d'évolution"  
+            st.session_state['page'] = "Page d'évolution"
             st.rerun()
         else:
             st.error(message)
 
+
 def show_admin_principal_login():
     st.subheader("Connexion Administrateur Principal")
-    admin_principal_id = st.text_input("ID Administrateur Principal")
-    admin_principal_password = st.text_input("Mot de passe", type="password")
+
+    if 'admin_principal_id' not in st.session_state:
+        st.session_state['admin_principal_id'] = ""
+    if 'admin_principal_password' not in st.session_state:
+        st.session_state['admin_principal_password'] = ""
+
+    admin_principal_id = st.text_input("ID Administrateur Principal", value=st.session_state['admin_principal_id'])
+    admin_principal_password = st.text_input("Mot de passe", type="password", value=st.session_state['admin_principal_password'])
 
     if st.button("Se connecter"):
+        st.session_state['admin_principal_id'] = admin_principal_id
+        st.session_state['admin_principal_password'] = admin_principal_password
+
         success, message = authenticate_user(admin_principal_id, admin_principal_password, 'admin_principal')
         if success:
             st.success("Connexion réussie !")
@@ -99,21 +128,28 @@ def show_admin_principal_login():
         else:
             st.error(message)
 
+
 def show_parent_login():
     st.subheader("Connexion Parent")
-    parent_id = st.text_input("Entrer le Matricule de l'élève")  # Saisir le matricule de l'enfant
+
+    if 'parent_id' not in st.session_state:
+        st.session_state['parent_id'] = ""
+
+    parent_id = st.text_input("Entrer le Matricule de l'élève", value=st.session_state['parent_id'])
 
     if st.button("Se connecter"):
-        # On utilise le même matricule comme identifiant et mot de passe
-        success, message = authenticate_user(parent_id, parent_id, 'parent')  
+        st.session_state['parent_id'] = parent_id  
+
+        success, message = authenticate_user(parent_id, parent_id, 'parent')
         if success:
             st.success("Connexion réussie !")
             st.session_state['role'] = 'parent'
             st.session_state['page'] = "Page d'évolution"
-            st.session_state['matricule_eleve'] = parent_id  # Enregistrer le matricule de l'élève
+            st.session_state['matricule_eleve'] = parent_id
             st.rerun()
         else:
             st.error(message)
+
 
 def comptes_page():
     load_css("static/styles/styles.css")

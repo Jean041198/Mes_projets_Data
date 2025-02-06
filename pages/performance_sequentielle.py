@@ -326,6 +326,7 @@ def performance_sequentielle_page():
                     
                         # Comparer aux notes précédentes
                         if st.session_state['sequence'] > 1:
+                            
                             notes_precedentes = get_notes_eleve_precedentes(matricule_eleve=matricule_eleve, matiere=matiere, sequence_precedente=st.session_state['sequence'] - 1)
                             if notes_precedentes:
                                 note_precedente = notes_precedentes[0][0] if notes_precedentes else None
